@@ -7,6 +7,8 @@ import { login } from '../actions/authAction';
 import { withRouter, Link, Redirect } from 'react-router-dom';
 import Loader from './Loader';
 import Alert from 'react-s-alert';
+import {bindActionCreators} from 'redux';
+import * as actions from '../actions/authAction';
 
 class Login extends Component {
 
@@ -45,7 +47,8 @@ class Login extends Component {
       event.preventDefault();
       this.setState({isLoading: true});
       this.props.login(this.state.credentials)
-          .then(() => {
+          .then((res) => {
+              console.log('!!!!!!!!!!', res);
               setTimeout(function() {
                 this.setState({ isLoggedIn: true, isLoading: false, });
               }.bind(this), 3000);
@@ -54,6 +57,7 @@ class Login extends Component {
                  effect: 'bouncyflip'
               });
           }, (err) => {
+            console.log('&&&!!!', err);
              this.setState({isLoading: false, message: 'error', status: 'ERROR'});
               Alert.error('Error', {
                      position: 'top',
@@ -64,6 +68,7 @@ class Login extends Component {
   }
 
   render() {
+      console.log('!!',this.props);
       const { errors, email, password, isLoading, isLoggedIn } = this.state;
 
       if( isLoggedIn ) {
@@ -99,7 +104,7 @@ class Login extends Component {
 
                     <input
                         type="submit"
-                        className="btn btn-lg btn-primary btn-block" /> 
+                        className="btn btn-lg btn-primary btn-block" />
                 </form>
             </div>
           </div>
@@ -109,4 +114,13 @@ class Login extends Component {
 
 }
 
-export default withRouter(connect(null, { login })(Login));
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+const mapStateToProps = (state) => ({
+  user: state.authReducer.user,
+  status: state.authReducer.status
+})
+
+export default withRouter(connect(mapStateToProps, { login })(Login));

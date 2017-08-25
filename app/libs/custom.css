@@ -1,9 +1,23 @@
-html, body, #root, .main-container {
+/*html, body, #root, .main-container {
   height: 100%;
-}
+}*/
 
 body {
-  background: #eee !important;
+  /*background: #eee !important;*/
+  padding-top: 70px;
+}
+
+.mg-t-25 {
+    margin-top: 25px;
+}
+
+.mg-t-10 {
+    margin-top: 10px;
+}
+
+.seller-preview {
+  width: 150px;
+  height: 150px;
 }
 
 .wrapper {
@@ -106,3 +120,121 @@ body {
   0% { opacity: 1 }
   100% { opacity: 0 }
 }
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.seller-profile {
+  width: 70px;
+  height: 70px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+    height: 50px;
+}
+
+td {
+  height: 30px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+.btn-add {
+  margin-bottom: 20px;
+}
+
+.btn-add-icon {
+  margin-right: 5px;
+}
+
+.fa-sign-out {
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Nav bar customization starts here */
+.navbar-default {
+  background-color: #71086f;
+  border-color: #cf51dc;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #eeeeee;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #eeeeee;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #eeeeee;
+  background-color: #cf51dc;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #eeeeee;
+  background-color: #cf51dc;
+}
+.navbar-default .navbar-toggle {
+  border-color: #cf51dc;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #cf51dc;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #eeeeee;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #eeeeee;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #eeeeee;
+    background-color: #cf51dc;
+  }
+}
+
+/* Nav bar customization ends here */
