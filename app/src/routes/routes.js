@@ -9,7 +9,7 @@ import createBrowserHistory from './history';
 import LoginContainer from '../containers/LoginContainer';
 import Dashboard from '../containers/Dashboard';
 import SellerDetailContainer from '../containers/SellerDetailContainer';
-import AddSellerContainer from '../containers/AddSellerContainer'; 
+import AddSellerContainer from '../containers/AddSellerContainer';
 
 const isAuthenticated = () => localStorage.getItem('fashnoidSession') != null ? true : false;
 console.log('@#', isAuthenticated());
@@ -31,7 +31,7 @@ export default (
     <div>
       <Route exact component={ LoginContainer } path="/" />
       <PrivateRoute path="/dashboard" component={Dashboard}/>
-      <PrivateRoute path="/seller/new" component={AddSellerContainer}/>
+      <PrivateRoute path="/seller/new/:index" component={AddSellerContainer}/>
       <PrivateRoute path="/seller:id" component={SellerDetailContainer}/>
     </div>
   </Router>

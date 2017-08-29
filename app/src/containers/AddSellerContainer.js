@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions/sellerAction';
 import Loader from '../components/Loader';
+import Alert from '../components/Alert';
 import { Redirect } from 'react-router-dom';
 import * as constants from '../constants/messages';
 
@@ -15,40 +16,53 @@ class AddSellerContainer extends Component {
     super( props );
   }
 
-  onChange = (e) => {
-    this.props.actions.updateSellerDetail(e.target.name, e.target.value);
+  hideAlert = (e) => {
+    this.props.actions.clearMessage();
   }
 
-  componentWillMount() {
-    const isAuthenticated = () => localStorage.getItem('fashnoidSession') != null ? true : false;
-    if( isAuthenticated() ) {
-      this.props.actions.setLoggedIn( true );
+  onSubmit = ( sellerDetail, imageFile ) => {
+    console.log(sellerDetail, imageFile);
+    if( imageFile == null ) {
+      this.props.actions.setMessage(" Please upload an image", 'FAILURE');
+      return;
     }
-  }
-
-  onImageChange = (e) => {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.props.actions.updateSellerProfileImage(file, reader.result);
+    if( sellerDetail.sellerName == "" ) {
+      this.props.actions.setMessage(" Seller Name is Required ", 'FAILURE');
+      return;
     }
-
-    reader.readAsDataURL(file)
-  }
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.props.sellerDetail);
-    this.props.actions.saveSellerDetails(this.props.sellerDetail, this.props.sellerProfileImg.file);
+    this.props.actions.saveSellerDetails(sellerDetail, imageFile);
   }
 
   render() {
 
-    const { sellerDetail, sellerProfileImg, isLoading, status, message, isLoggedIn } = this.props
-    console.log(this.props);
+    const { sellerDetails, sellerProfileImg, isLoading, status, message, isLoggedIn } = this.props
+    console.log(this.props.match.params.index, sellerDetails, message);
+
+    let sellerDetail = {
+        "externalId": "",
+        "description": "",
+        "sellerName": "",
+        "sellerProfile": "",
+        "genderCategory": "MALE",
+        "productCategory": "Shirt",
+        "shopURL": "",
+        "fbURL": "",
+        "twitterURL": "",
+        "instagramURL": "",
+        "storeCategory": "ONLINE",
+        "phone": "",
+        "email": "",
+        "address": "",
+        "reviewCount": 0,
+        "reviewValue": 0,
+        "images": []
+    };
+
+    const index = this.props.match.params.index;
+
+    if(  index > -1 ) {
+      sellerDetail = sellerDetails[ index ];
+    }
 
     if( !isLoggedIn ) {
       return (<Redirect to="/" />)
@@ -62,9 +76,9 @@ class AddSellerContainer extends Component {
           <li className="active">New Seller</li>
         </ol>
       { isLoading && <Loader/> }
-
+      <Alert hideAlert={this.hideAlert} status={ status } message={ message }/>
       <AddSellerDetails sellerDetail={sellerDetail} onImageChange={this.onImageChange}
-       sellerImagePreviewUrl={sellerProfileImg.sellerImagePreviewUrl} onChange={this.onChange} onSubmit={this.onSubmit}/>
+        onSubmit={this.onSubmit}/>
       </div>
     )
   }
@@ -75,6 +89,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
+  sellerDetails: state.sellerReducer.sellerDetails,
   sellerDetail: state.sellerReducer.sellerDetail,
   isLoading: state.sellerReducer.isLoading,
   status: state.sellerReducer.status,

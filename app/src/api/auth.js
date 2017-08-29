@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as token from './token';
+const getToken = () => localStorage.getItem('fashnoidSession');
 
 export default class auth {
 
@@ -15,7 +15,7 @@ export default class auth {
   }
 
   static loginUser( user ) {
-    const url = `https://www.fashnoid.com/rest/user/login?access_token=${token.access_token}`;
+    const url = `https://www.fashnoid.com/rest/user/login?access_token=${getToken()}`;
     return axios.post(url, {
       email: user.email,
       password: user.password

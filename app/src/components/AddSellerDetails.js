@@ -5,21 +5,73 @@ export default class AddSellerDetails extends Component {
 
   constructor(props){
     super(props);
+    this.onChange = this.onChange.bind(this);
+    this.setGender = this.setGender.bind(this);
+    this.setPdtCategory = this.setPdtCategory.bind(this);
+    this.setStoreCategory = this.setStoreCategory.bind(this);
+    this.state = {
+      sellerDetail: props.sellerDetail,
+      imagePreviewUrl : '',
+      imageFile : null
+    }
   }
 
-  /*static propTypes = {
-    sellerDetail: PropTypes.object.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired
-  }*/
+  onImageChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        imagePreviewUrl: reader.result,
+        imageFile: file
+      })
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  onChange( event ) {
+    const sellerDetail = this.state.sellerDetail;
+    sellerDetail[event.target.name] = event.target.value;
+    return this.setState({ sellerDetail: sellerDetail });
+  }
+
+  setGender( event ) {
+    const sellerDetail = this.state.sellerDetail;
+    sellerDetail['genderCategory'] = event.target.value;
+    return this.setState({ sellerDetail: sellerDetail });
+  }
+
+  setPdtCategory( event ) {
+    const sellerDetail = this.state.sellerDetail;
+    sellerDetail['productCategory'] = event.target.value;
+    return this.setState({ sellerDetail: sellerDetail });
+  }
+
+  setStoreCategory( event ) {
+    const sellerDetail = this.state.sellerDetail;
+    sellerDetail['storeCategory'] = event.target.value;
+    return this.setState({ sellerDetail: sellerDetail });
+  }
+
+  componentWillReceiveProps( nextProps ) {
+    console.log( 'nextProps props ', nextProps);
+  }
 
   render() {
 
-    let {sellerDetail, onChange, onSubmit, onImageChange, sellerImagePreviewUrl } = this.props;
+    let { onSubmit } = this.props;
     let imagePreview = null;
+    let {sellerDetail, imagePreviewUrl} = this.state;
 
-    if( sellerImagePreviewUrl != "") {
-      imagePreview = (<img className="seller-preview" src={sellerImagePreviewUrl}/>);
+    console.log( sellerDetail );
+
+    if( imagePreviewUrl != "") {
+      imagePreview = (<img className="seller-preview" src={imagePreviewUrl}/>);
+    } else if(sellerDetail.sellerProfile != "") {
+      imagePreview = (<img className="seller-preview" src={sellerDetail.sellerProfile}/>);
     } else {
       imagePreview = (<div className="mg-t-25">Please select an Image for Preview</div>);
     }
@@ -36,12 +88,12 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.sellerName}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
                 <div className="col-xs-6">
                   <div className="row">
                     <div className="col-xs-6">
-                      <input type="file" className="mg-t-25" onChange={onImageChange}/>
+                      <input type="file" className="mg-t-25" onChange={this.onImageChange}/>
                     </div>
                     <div className="col-xs-6">
                       {imagePreview}
@@ -59,40 +111,32 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.description}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
                 <div className="col-xs-6">
-                  <TextInput
-                      name="genderCategory"
-                      label="Gender Category"
-                      type="text"
-                      value={sellerDetail.genderCategory}
-                      error=""
-                      placeholder=""
-                      onChange={onChange} />
+                  <label> Gender </label>
+                  <select className="input-select" value={sellerDetail.genderCategory}
+                    onChange={this.setGender}>
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                  </select>
                 </div>
               </div>
 
               <div className="row">
                 <div className="col-xs-6">
-                 <TextInput
-                     name="productCategory"
-                     label="Product Category"
-                     type="text"
-                     value={sellerDetail.productCategory}
-                     error=""
-                     placeholder=""
-                     onChange={onChange} />
+                  <label> Product Category </label>
+                  <select className="input-select" value={sellerDetail.productCategory}
+                    onChange={this.setPdtCategory}>
+                    <option value="Shirt">Shirt</option>
+                  </select>
                 </div>
                 <div className="col-xs-6">
-                 <TextInput
-                     name="storeCategory"
-                     label="Store Category"
-                     type="text"
-                     value={sellerDetail.storeCategory}
-                     error=""
-                     placeholder=""
-                     onChange={onChange} />
+                  <label> Store Category </label>
+                  <select className="input-select" value={sellerDetail.storeCategory}
+                    onChange={this.setStoreCategory}>
+                    <option value="ONLINE">ONLINE</option>
+                  </select>
                 </div>
               </div>
 
@@ -105,7 +149,7 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.email}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
                 <div className="col-xs-6">
                  <TextInput
@@ -115,7 +159,7 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.phone}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
               </div>
 
@@ -128,7 +172,7 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.shopURL}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
                 <div className="col-xs-6">
                  <TextInput
@@ -138,7 +182,7 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.fbURL}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
               </div>
 
@@ -151,7 +195,7 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.twitterURL}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
                 <div className="col-xs-6">
                  <TextInput
@@ -161,9 +205,11 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.instagramURL}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
                 </div>
               </div>
+              <div className="row">
+                <div className="col-xs-12">
                  <TextInput
                      name="address"
                      label="Address"
@@ -171,9 +217,11 @@ export default class AddSellerDetails extends Component {
                      value={sellerDetail.address}
                      error=""
                      placeholder=""
-                     onChange={onChange} />
+                     onChange={this.onChange} />
+                </div>
+              </div>
                  <input
-                     type="submit" onClick={onSubmit}
+                     type="submit" onClick={() => onSubmit(sellerDetail, this.state.imageFile)}
                      className="btn btn-lg btn-primary btn-block" />
            </div>
         </div>

@@ -47,13 +47,13 @@ export function getSellerListSuccess( data ) {
 }
 
 export function getSellerListFailure( ) {
-  return {type: types.GET_SELLER_DETAILS_FAILURE, sellerDetails: data };
+  return {type: types.GET_SELLER_DETAILS_FAILURE, sellerDetails: [] };
 }
 
 export const saveSellerDetails = (sellerDetail, profileImage) => {
   return dispatch => {
     dispatch(sellerRequest());
-    return seller.saveSellerDetail(sellerDetail, profileImage).then(res => { 
+    return seller.saveSellerDetail(sellerDetail, profileImage).then(res => {
       if( res.message === 'Network Error' ) {
         localStorage.removeItem('fashnoidSession');
         localStorage.removeItem('fashnoidUser');
@@ -64,6 +64,9 @@ export const saveSellerDetails = (sellerDetail, profileImage) => {
         return dispatch(saveSellerDetailFailure());
       }
       dispatch(saveSellerDetailSuccess(res.data));
+      setTimeout( function(){
+        dispatch(clearMessage());
+      }, 2000);
     }).catch(error => {
 
       console.log('---- errorres ----', error );
@@ -76,6 +79,7 @@ export const getSellerList = ( page ) => {
   return dispatch => {
     dispatch(sellerRequest());
     return seller.getSellerList(page).then(res => {
+      console.log(res.message);
       if( res.message == 'Network Error' ) {
         localStorage.removeItem('fashnoidSession');
         localStorage.removeItem('fashnoidUser');

@@ -12,7 +12,6 @@ export default class DataTable extends Component {
     }
   }
 
-
   render() {
 
     let columns = ['Seller Name', 'Seller Dp', 'Gender', 'Product Categories',
@@ -22,12 +21,12 @@ export default class DataTable extends Component {
     });
 
 
-    let { rows, page, onNextClick, onPrevClick } = this.props;
- 
+    let { rows, page, onNextClick, onPrevClick, onNameClick } = this.props;
+
     let rowsView = rows.map( function( row, index ) {
       return (
         <tr key={index}>
-          <td>{row.sellerName}</td>
+          <td><a className="link" onClick={() => onNameClick(index)}>{row.sellerName}</a></td>
           <td>{row.sellerProfile != '' ? <img src={row.sellerProfile} className="seller-profile"/> : <i className="fa fa-user"/> }</td>
           <td>{row.genderCategory}</td>
           <td>{row.productCategory}</td>
@@ -47,7 +46,7 @@ export default class DataTable extends Component {
        </div>
        <div className="col-xs-4"></div>
        <div className="col-xs-4 ">
-          <Link to="/seller/new" className="btn btn-primary pull-right btn-add"><i className="fa fa-plus btn-add-icon"/>Add</Link>
+          <Link to="/seller/new/-1" className="btn btn-primary pull-right btn-add"><i className="fa fa-plus btn-add-icon"/>Add</Link>
        </div>
 
        <table>

@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom';
 import * as constants from '../constants/messages';
 import { Link } from 'react-router-dom';
 
+
 class Dashboard extends Component {
 
   constructor(props) {
@@ -19,13 +20,22 @@ class Dashboard extends Component {
     }
     this.onPrevClick = this.onPrevClick.bind(this);
     this.onNextClick = this.onNextClick.bind(this);
+    this.onNameClick = this.onNameClick.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('= nextProps =', nextProps);
+    if( !nextProps.isLoggedIn && nextProps.message === 'Session Expired') {
+      this.props.history.push('/');
+    }
   }
 
   componentWillMount() {
      const result = this.props.actions.setLoggedIn(true);
-     if( result.isLoggedIn ) {
-       this.props.actions.getSellerList(this.state.page);
-     }
+     let _this = this;
+     setTimeout( function() {
+       _this.props.actions.getSellerList(_this.state.page);
+     }, 100);
   }
 
   onPrevClick(event) {
@@ -38,7 +48,10 @@ class Dashboard extends Component {
       const page = this.state.page + 1;
       this.props.actions.getSellerList(page);
       return this.setState({ page: page });
+  }
 
+  onNameClick( index ) {
+    this.props.history.push('/seller/new/'+index);
   }
 
   render() {
@@ -49,20 +62,16 @@ class Dashboard extends Component {
 
     console.log( '-- dashboard --',this.props );
 
-    /*if( !isLoggedIn ) {
-      return (<Redirect to="/" />)
-    }*/
-
     return(
       <div>
         <Header />
-
         <ol className="breadcrumb">
           <li className="active">Dashboard </li>
         </ol>
         { isLoading && <Loader/> }
         <DataTable rows={sellerDetails} page={ page }
-        onPrevClick={this.onPrevClick} onNextClick={this.onNextClick}/>
+        onPrevClick={this.onPrevClick} onNextClick={this.onNextClick}
+        onNameClick={this.onNameClick}/>
       </div>
     )
   }
