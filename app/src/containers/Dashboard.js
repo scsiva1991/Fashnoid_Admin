@@ -8,7 +8,7 @@ import Loader from '../components/Loader';
 import { Redirect } from 'react-router-dom';
 import * as constants from '../constants/messages';
 import { Link } from 'react-router-dom';
-
+import Alert from '../components/Alert';
 
 class Dashboard extends Component {
 
@@ -21,6 +21,7 @@ class Dashboard extends Component {
     this.onPrevClick = this.onPrevClick.bind(this);
     this.onNextClick = this.onNextClick.bind(this);
     this.onNameClick = this.onNameClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind( this );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,19 +40,27 @@ class Dashboard extends Component {
   }
 
   onPrevClick(event) {
-      const page = this.state.page - 1;
+      const page = this.state.page - 10;
       this.props.actions.getSellerList(page);
       return this.setState({ page: page });
   }
 
   onNextClick(event) {
-      const page = this.state.page + 1;
+      const page = this.state.page + 10;
       this.props.actions.getSellerList(page);
       return this.setState({ page: page });
   }
 
   onNameClick( index ) {
     this.props.history.push('/seller/new/'+index);
+  }
+
+  onDeleteClick( id, index ) {
+    this.props.actions.deleteSeller( id );
+  }
+
+  hideAlert = (e) => {
+    this.props.actions.clearMessage();
   }
 
   render() {
@@ -69,9 +78,10 @@ class Dashboard extends Component {
           <li className="active">Dashboard </li>
         </ol>
         { isLoading && <Loader/> }
+        <Alert hideAlert={this.hideAlert} status={ status } message={ message }/>
         <DataTable rows={sellerDetails} page={ page }
         onPrevClick={this.onPrevClick} onNextClick={this.onNextClick}
-        onNameClick={this.onNameClick}/>
+        onNameClick={this.onNameClick} onDeleteClick={this.onDeleteClick}/>
       </div>
     )
   }

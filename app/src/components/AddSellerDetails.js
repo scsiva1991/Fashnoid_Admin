@@ -1,5 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import TextInput from './TextInput';
+import * as constants from '../constants/messages';
+import initialState from '../reducers/initialState';
+import ProductImages from './ProductImages';
 
 export default class AddSellerDetails extends Component {
 
@@ -12,13 +15,13 @@ export default class AddSellerDetails extends Component {
     this.state = {
       sellerDetail: props.sellerDetail,
       imagePreviewUrl : '',
-      imageFile : null
+      imageFile : null,
+      updatePdt: props.updatePdt
     }
   }
 
   onImageChange = (e) => {
     e.preventDefault();
-
     let reader = new FileReader();
     let file = e.target.files[0];
 
@@ -57,16 +60,26 @@ export default class AddSellerDetails extends Component {
   }
 
   componentWillReceiveProps( nextProps ) {
-    console.log( 'nextProps props ', nextProps);
+    console.log('@@@@@@@@@@@@@@', nextProps.message);
+    if( nextProps.message == constants.SAVE_SELLER_DETAIL_SUCCESS ) {
+      this.setState({ updatePdt: true,
+                      imagePreviewUrl : '',
+                      imageFile : null,
+                      sellerDetail: nextProps.sellerDetail
+                     });
+      document.getElementById('file').value = '';
+      console.log('#$#$#$');
+    }
+
   }
 
   render() {
 
-    let { onSubmit } = this.props;
+    let { onSubmit, message, onPdtImgSubmit } = this.props;
+    let sellerDetailProps = this.props.sellerDetail;
     let imagePreview = null;
-    let {sellerDetail, imagePreviewUrl} = this.state;
-
-    console.log( sellerDetail );
+    let {sellerDetail, imagePreviewUrl, updatePdt } = this.state;
+    console.log("---------- -sellerDetail ---------", sellerDetail, sellerDetailProps);
 
     if( imagePreviewUrl != "") {
       imagePreview = (<img className="seller-preview" src={imagePreviewUrl}/>);
@@ -78,7 +91,7 @@ export default class AddSellerDetails extends Component {
     return(
       <div className="container">
         <div className="row">
-           <div className="col-md-11 col-md-offset-1" >
+           <div className="col-md-8" >
               <div className="row">
                 <div className="col-xs-6">
                   <TextInput
@@ -93,7 +106,7 @@ export default class AddSellerDetails extends Component {
                 <div className="col-xs-6">
                   <div className="row">
                     <div className="col-xs-6">
-                      <input type="file" className="mg-t-25" onChange={this.onImageChange}/>
+                      <input type="file" id="file" className="mg-t-25" onChange={this.onImageChange}/>
                     </div>
                     <div className="col-xs-6">
                       {imagePreview}
@@ -220,9 +233,13 @@ export default class AddSellerDetails extends Component {
                      onChange={this.onChange} />
                 </div>
               </div>
-                 <input
+                 {<input
                      type="submit" onClick={() => onSubmit(sellerDetail, this.state.imageFile)}
-                     className="btn btn-lg btn-primary btn-block" />
+                     className="btn btn-lg btn-primary btn-block" />}
+           </div>
+           <div className="col-md-4" >
+             <ProductImages sellerDetail={sellerDetailProps} updatePdt={updatePdt}
+              onPdtImgSubmit={onPdtImgSubmit}/>
            </div>
         </div>
       </div>

@@ -2,6 +2,25 @@
 
 import * as types from '../constants/actionTypes';
 import initialState from './initialState';
+const sellerDetail = {
+  "externalId": "",
+  "description": "",
+  "sellerName": "",
+  "sellerProfile": "",
+  "genderCategory": "MALE",
+  "productCategory": "Shirt",
+  "shopURL": "",
+  "fbURL": "",
+  "twitterURL": "",
+  "instagramURL": "",
+  "storeCategory": "ONLINE",
+  "phone": "",
+  "email": "",
+  "address": "",
+  "reviewCount": 0,
+  "reviewValue": 0,
+  "images": []
+};
 
 const seller = (state = initialState, action) => {
   switch (action.type) {
@@ -12,16 +31,33 @@ const seller = (state = initialState, action) => {
           sellerDetails: action.sellerDetails,
         isLoading: false
       }
+    case types.RESET_SELLER_DETAIL:
+      return {
+        ...state,
+        sellerDetail: sellerDetail,
+        isLoading: false
+      }
     case types.ADD_SELLER_DETAIL_SUCCESS:
+    case types.UPDATE_SELLER_DETAIL_SUCCESS:
       return { ...state,
 
                 status: action.status,
                 message: action.message,
                 isLoading: false,
-                sellerDetail: initialState.sellerDetail,
+                sellerDetail: action.sellerDetail,
                 sellerImagePreviewUrl: ''
              };
-     case types.ADD_SELLER_DETAIL_FAILURE:
+     case types.SAVE_SELLER_PRODUCT_SUCCESS:
+       return { ...state,
+
+                 status: action.status,
+                 message: action.message,
+                 isLoading: false,
+                 sellerDetail: action.sellerDetail,
+                 sellerImagePreviewUrl: ''
+              };
+     case types.UPDATE_SELLER_DETAIL_FAILURE:
+     case types.SAVE_SELLER_PRODUCT_FAILURE:
        return { ...state,
                  status: action.status,
                  message: action.message,
@@ -58,6 +94,25 @@ const seller = (state = initialState, action) => {
       };
     case types.SET_LOGGED_IN:
       return {...state, isLoggedIn: action.isLoggedIn, isLoading: false };
+    case types.DELETE_SELLER_DETAIL_FAILURE:
+      return {
+        ...state,
+        message: action.message,
+        status: action.status,
+        isLoading: false
+      }
+    case types.DELETE_SELLER_DETAIL_SUCCESS:
+      let sellerDetails = state.sellerDetails;
+      let filteredSellerDetails = sellerDetails.filter( function(seller) {
+        return seller.externalId != action.id;
+      })
+      return {
+        ...state,
+        message: action.message,
+        status: action.status,
+        isLoading: false,
+        sellerDetails: filteredSellerDetails
+      }
     default:
       return state;
   }

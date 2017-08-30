@@ -7,22 +7,20 @@ body {
   padding-top: 70px;
 }
 
-.alert-enter {
-  opacity: 0.01;
-  transition: opacity 500ms ease-in;
+.pdt-empty {
+  margin: 200px auto;
 }
 
-.alert-enter.alert-enter-active {
-  opacity: 1;
+.fa-trash {
+  color: red;
+  font-size: 20px;
+  cursor: pointer;
 }
 
-.alert-leave {
-  opacity: 1;
-  transition: opacity 300ms ease-in;
-}
-
-.alert-leave.alert-leave-active {
-  opacity: 0.01;
+.pdt-img-container {
+  background: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  padding: 10px;
 }
 
 .mg-t-25 {

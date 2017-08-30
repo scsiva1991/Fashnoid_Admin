@@ -15,13 +15,13 @@ export default class DataTable extends Component {
   render() {
 
     let columns = ['Seller Name', 'Seller Dp', 'Gender', 'Product Categories',
-                   'Shop Link', 'Shop Category', 'Phone', 'Email', 'Address'];
+                   'Shop Link', 'Shop Category', 'Phone', 'Email', 'Address', 'Action'];
     let columnsView = columns.map(function(column, index){
       return (<th key={index} >{column}</th>);
     });
 
 
-    let { rows, page, onNextClick, onPrevClick, onNameClick } = this.props;
+    let { rows, page, onNextClick, onPrevClick, onNameClick, onDeleteClick } = this.props;
 
     let rowsView = rows.map( function( row, index ) {
       return (
@@ -35,6 +35,7 @@ export default class DataTable extends Component {
           <td>{row.phone}</td>
           <td>{row.email}</td>
           <td>{row.address}</td>
+          <td><span onClick={() => onDeleteClick(row.externalId, index)}><i className="fa fa-trash" aria-hidden="true"></i></span></td>
         </tr>
       );
     });

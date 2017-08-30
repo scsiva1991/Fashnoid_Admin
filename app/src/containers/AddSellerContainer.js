@@ -21,8 +21,8 @@ class AddSellerContainer extends Component {
   }
 
   onSubmit = ( sellerDetail, imageFile ) => {
-    console.log(sellerDetail, imageFile);
-    if( imageFile == null ) {
+
+    if( sellerDetail.externalId == "" && imageFile == null ) {
       this.props.actions.setMessage(" Please upload an image", 'FAILURE');
       return;
     }
@@ -30,38 +30,51 @@ class AddSellerContainer extends Component {
       this.props.actions.setMessage(" Seller Name is Required ", 'FAILURE');
       return;
     }
+    if( sellerDetail.externalId != "") {
+      this.props.actions.updateSellerDetails( sellerDetail, imageFile );
+      return;
+    }
     this.props.actions.saveSellerDetails(sellerDetail, imageFile);
+  }
+
+  onPdtImgSubmit = ( sellerDetail, pdtImages ) => {
+    console.log( sellerDetail, pdtImages );
+    let imageFiles = [];
+    if( pdtImages.imageFile0 != null ) {
+      imageFiles.push( pdtImages.imageFile0 );
+      this.props.actions.saveSellerProduct(sellerDetail.externalId, pdtImages.imageFile0);
+    }
+    
+    if( pdtImages.imageFile1 != null ) {
+      imageFiles.push( pdtImages.imageFile1 );
+      this.props.actions.saveSellerProduct(sellerDetail.externalId, pdtImages.imageFile1);
+    }
+
+    if( pdtImages.imageFile2 != null ) {
+      this.props.actions.saveSellerProduct(sellerDetail.externalId, pdtImages.imageFile2);
+    }
+
+    if( pdtImages.imageFile3 != null ) {
+      this.props.actions.saveSellerProduct(sellerDetail.externalId, pdtImages.imageFile3);
+    }
+
+    if( imageFiles.length === 0 ) {
+      this.props.actions.setMessage(" Please upload an image", 'FAILURE');
+      return;
+    }
+
   }
 
   render() {
 
-    const { sellerDetails, sellerProfileImg, isLoading, status, message, isLoggedIn } = this.props
-    console.log(this.props.match.params.index, sellerDetails, message);
-
-    let sellerDetail = {
-        "externalId": "",
-        "description": "",
-        "sellerName": "",
-        "sellerProfile": "",
-        "genderCategory": "MALE",
-        "productCategory": "Shirt",
-        "shopURL": "",
-        "fbURL": "",
-        "twitterURL": "",
-        "instagramURL": "",
-        "storeCategory": "ONLINE",
-        "phone": "",
-        "email": "",
-        "address": "",
-        "reviewCount": 0,
-        "reviewValue": 0,
-        "images": []
-    };
+    let { sellerDetails, sellerDetail, sellerProfileImg, isLoading, status, message, isLoggedIn } = this.props
 
     const index = this.props.match.params.index;
+    let updatePdt = false;
 
     if(  index > -1 ) {
       sellerDetail = sellerDetails[ index ];
+      updatePdt = true;
     }
 
     if( !isLoggedIn ) {
@@ -78,7 +91,7 @@ class AddSellerContainer extends Component {
       { isLoading && <Loader/> }
       <Alert hideAlert={this.hideAlert} status={ status } message={ message }/>
       <AddSellerDetails sellerDetail={sellerDetail} onImageChange={this.onImageChange}
-        onSubmit={this.onSubmit}/>
+        onSubmit={this.onSubmit} message={message} updatePdt={updatePdt} onPdtImgSubmit={this.onPdtImgSubmit}/>
       </div>
     )
   }
